@@ -1,0 +1,69 @@
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: order-service
+#          uri: lb://order-service-ms
+#          predicates:
+#            - path=/orders/**
+#
+#        - id: user-service
+#          uri: lb://USER-SERVICE-MS
+#          predicates:
+#            - path=/users/**
+#
+#        - id: payment-service
+#          uri: lb://payment-service-ms
+#          predicates:
+#            - path=/payments/**
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-app
+          uri: lb://user-service-ms
+          predicates:
+            - Path=/users/**
+          filters:
+            - AuthenticationFilter
+
+
+        - id: order-app
+          uri: lb://order-service-ms
+          predicates:
+            - Path=/orders/**
+          filters:
+            - AuthenticationFilter
+
+        - id: payment-app
+          uri: lb://payment-service-ms
+          predicates:
+            - Path=/payments/**
+          filters:
+            - AuthenticationFilter
+
+        - id: auth-app
+          uri: lb://auth-service-ms
+          predicates:
+            - Path=/auth/**
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
+
+
+server:
+  port: 9198
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
