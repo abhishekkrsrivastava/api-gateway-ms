@@ -1,33 +1,10 @@
 version: '3.8'
 
 services:
-  mysql-db:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: test1234
-      MYSQL_DATABASE: api_schema
-
-    ports:
-      - '3307:3306'
-    volumes:
-      - /data/mysql
-    container_name: api-schema-db
-
   application:
     build:
       context: .
       dockerfile: Dockerfile
     image: api-gateway-ms:1.1
-    depends_on:
-      - mysql-db
-    ports:
-      - '9198:9198'
-    volumes:
-      - /data/api-gateway-ms
-    container_name: api-gateway-ms
 
-    environment:
-      SPRING_DATASOURCE_URL: 'jdbc:mysql://mysql-db:3306/api_schema?allowPublicKeyRetrieval=true&useSSL=false'
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: test1234
 
